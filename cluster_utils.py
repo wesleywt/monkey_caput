@@ -127,7 +127,7 @@ class LocalAggregationLoss(nn.Module):
 
         Args:
             codes_data:
-            indices:
+            indices: ??
 
         Returns:
             indices_nearest (numpy.ndarray): Boolean array of k-nearest neighbours for the batch of codes
@@ -235,6 +235,7 @@ class LocalAggregationLoss(nn.Module):
             loss:
 
         '''
+        print(codes.shape[0])
         assert codes.shape[0] == len(indices)
 
         codes = codes.type(torch.DoubleTensor)
