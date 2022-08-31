@@ -203,8 +203,8 @@ class LocalAggregationLoss(nn.Module):
         # In case the subsets of memory vectors are all of the same size, broadcasting can be used and the
         # batch dimension is handled concisely. This will always be true for the k-nearest neighbour density
         if not ragged and not force_stack:
-            vals = torch.tensor([np.compress(ind, self.memory_bank.vectors, axis=0) for ind in indices],
-                                requires_grad=False)
+            extracted_vectors = np.concatenate([np.compress(ind, self.memory_bank.vectors, axis=0) for ind in indices]) # change from list of np arrays to single ndarray
+            vals = torch.tensor(extracted_vectors,requires_grad=False) # slow warning removed
             v_dots = torch.matmul(vals, codes.unsqueeze(-1))
             exp_values = torch.exp(torch.div(v_dots, self.temperature))
             xx = torch.sum(exp_values, dim=1).squeeze(-1)
@@ -235,7 +235,7 @@ class LocalAggregationLoss(nn.Module):
             loss:
 
         '''
-        print(codes.shape[0])
+
         assert codes.shape[0] == len(indices)
 
         codes = codes.type(torch.DoubleTensor)
