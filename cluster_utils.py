@@ -45,21 +45,22 @@ class MemoryBank(object):
         self.memory_mixing_rate = memory_mixing_rate
         self.mask_init = np.array([False] * n_vectors)
 
-    def update_memory(self, vectors, index):
+    def update_memory(self, vectors, indices):
         '''Update the memory with new vectors
 
         Args:
             vectors (np.ndarray)
         '''
-        if isinstance(index, int):
-            self.vectors[index] = self._update_(vectors, self.vectors[index])
+        if isinstance(indices, int):
+            self.vectors[indices] = self._update_(vectors, self.vectors[indices])
 
-        elif isinstance(index, np.ndarray):
-            for ind, vector in zip(index, vectors):
+        elif isinstance(indices, np.ndarray):
+            for ind, vector in zip(indices, vectors):
                 self.vectors[ind] = self._update_(vector, self.vectors[ind])
 
         else:
-            raise RuntimeError('Index must be of type integer or NumPy array, not {}'.format(type(index)))
+            print(indices)
+            raise RuntimeError('Index must be of type integer or NumPy array, not {}'.format(type(indices)))
 
     def mask(self, inds_int):
         '''Construct a Boolean mask given integer indices.
